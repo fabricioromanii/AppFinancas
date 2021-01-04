@@ -35,7 +35,7 @@ class TransactionForm extends StatelessWidget {
                   TextField(
                    controller: valueController,
                    keyboardType: TextInputType.numberWithOptions(decimal:true),
-                   onSubmitted: (_) => _submitForm(),
+                   onSubmitted: (value) => _submitForm(),
                     decoration:InputDecoration(
                       labelText: "Valor R\$",
                     ),
@@ -44,7 +44,7 @@ class TransactionForm extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget> [
                       FlatButton(
-                        child:
+                        child:  
                         Text("Nova despeza"),
                         textColor: Colors.green[800],
                         onPressed: _submitForm,
@@ -56,4 +56,4 @@ class TransactionForm extends StatelessWidget {
             ),
           );
   }
-}
+} 
