@@ -1,5 +1,6 @@
 import 'package:AppFinancas/models/transaction.dart';
 import 'package:flutter/material.dart';
+import 'components/chart.dart';
 import 'components/transaction_form.dart';
 import 'components/transaction_list.dart';
 import 'dart:math';
@@ -11,7 +12,10 @@ class ExpensesApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:MyHomePage()
+      home:MyHomePage(),
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
     );
   }
 }
@@ -24,27 +28,39 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-   final _transactions = [
+   final List<Transaction> _transactions = [
 
     Transaction(
       id:'t1',
       title: 'novo tenis de corrida',
       value: 310.76,
-      date: DateTime.now(),
+      date: DateTime.now().subtract(Duration(days:33)),
     ),
     Transaction(
       id:'t2',
-      title: 'novo tenis de corrida',
+      title: 'nova bota',
       value: 310.76,
-      date: DateTime.now(),
+      date: DateTime.now().subtract(Duration(days:5)),
     ),
     Transaction(
-      id:'t3',
-      title: 'novo tenis de corrida',
-      value: 310.76,
+      id:'t2',
+      title: 'nova bota',
+      value: 390.76,
       date: DateTime.now(),
     ),
+ 
   ];
+
+  List<Transaction> get _recentTransactions {
+
+    return _transactions.where((tr) {
+      
+      return tr.date.isAfter(DateTime.now().subtract(
+        Duration(days : 7),
+      ));
+    }).toList();
+
+  }
 
   _addTransaction(String title, double value){
     final newTransaction = Transaction(
@@ -58,6 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _transactions.add(newTransaction);
     });
 
+    Navigator.of(context).pop();
   }
 
   _openTransactionFormModal(BuildContext context){
@@ -88,12 +105,8 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              child: Card(
-                child: Text("Grafico"),
-                elevation: 10,
-                color:Colors.green[800],
-              ),
+            Chart(
+              _recentTransactions
             ),
             TransactionList(_transactions),
           ],
